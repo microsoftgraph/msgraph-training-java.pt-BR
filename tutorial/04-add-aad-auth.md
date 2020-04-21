@@ -1,145 +1,63 @@
 ---
-ms.openlocfilehash: 377db05d9b238d3f6f6e45032f0b85b9217df3db
-ms.sourcegitcommit: 2af94da662c454e765b32edeb9406812e3732406
+ms.openlocfilehash: 3e4d7f11c89947da29873c85ab2808279c94265a
+ms.sourcegitcommit: 189f87d879c57b11992e7bc75580b4c69e014122
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 12/13/2019
-ms.locfileid: "40018783"
+ms.lasthandoff: 04/21/2020
+ms.locfileid: "43612058"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
 Neste exercício, você estenderá o aplicativo do exercício anterior para oferecer suporte à autenticação com o Azure AD. Isso é necessário para obter o token de acesso OAuth necessário para chamar o Microsoft Graph. Nesta etapa, você integrará a [biblioteca de autenticação da Microsoft (MSAL) para Java](https://github.com/AzureAD/microsoft-authentication-library-for-java) no aplicativo.
 
-Crie um novo diretório chamado **recursos** no diretório **./graphtutorial/src/main** . Em seguida, crie um novo diretório chamado **com** no diretório de **recursos** e, em seguida, um novo diretório chamado **contoso** no diretório **com** . Por fim, crie um novo arquivo no diretório **./graphtutorial/src/main/resources/com/contoso** chamado **OAuth. Properties**e adicione o seguinte texto nesse arquivo.
+1. Crie um novo diretório chamado **graphtutorial** no diretório **./src/main/resources** .
 
-```INI
-app.id=YOUR_APP_ID_HERE
-app.scopes=User.Read,Calendars.Read
-```
+1. Crie um novo arquivo no diretório **./src/main/resources/graphtutorial** chamado **OAuth. Properties**e adicione o seguinte texto nesse arquivo.
 
-Substitua `YOUR_APP_ID_HERE` pela ID do aplicativo que você criou no portal do Azure.
+    :::code language="ini" source="../demo/graphtutorial/src/main/resources/graphtutorial/oAuth.properties.example":::
 
-> [!IMPORTANT]
-> Se você estiver usando o controle de origem como o Git, agora seria uma boa hora para excluir o arquivo **OAuth. Properties** do controle de origem para evitar vazar inadvertidamente sua ID de aplicativo.
+    Substitua `YOUR_APP_ID_HERE` pela ID do aplicativo que você criou no portal do Azure.
 
-Abra **app. java** e adicione as instruções `import` a seguir.
+    > [!IMPORTANT]
+    > Se você estiver usando o controle de origem como o Git, agora seria uma boa hora para excluir o arquivo **OAuth. Properties** do controle de origem para evitar vazar inadvertidamente sua ID de aplicativo.
 
-```java
-import java.io.IOException;
-import java.util.Properties;
-```
+1. Abra **app. java** e adicione as instruções `import` a seguir.
 
-Em seguida, adicione o código a seguir `Scanner input = new Scanner(System.in);` antes da linha carregar o arquivo **OAuth. Properties** .
+    ```java
+    import java.io.IOException;
+    import java.util.Properties;
+    ```
 
-```java
-// Load OAuth settings
-final Properties oAuthProperties = new Properties();
-try {
-    oAuthProperties.load(App.class.getResourceAsStream("oAuth.properties"));
-} catch (IOException e) {
-    System.out.println("Unable to read OAuth configuration. Make sure you have a properly formatted oAuth.properties file. See README for details.");
-    return;
-}
+1. Adicione o código a seguir antes da `Scanner input = new Scanner(System.in);` linha carregar o arquivo **OAuth. Properties** .
 
-final String appId = oAuthProperties.getProperty("app.id");
-final String[] appScopes = oAuthProperties.getProperty("app.scopes").split(",");
-```
+    :::code language="java" source="../demo/graphtutorial/src/main/java/graphtutorial/App.java" id="LoadSettingsSnippet":::
 
 ## <a name="implement-sign-in"></a>Implementar logon
 
-Crie um novo arquivo no diretório **./graphtutorial/src/main/java/com/contoso** chamado **Authentication. java** e adicione o código a seguir.
+1. Crie um novo arquivo no diretório **./graphtutorial/src/main/java/graphtutorial** chamado **Authentication. java** e adicione o código a seguir.
 
-```java
-package com.contoso;
-import java.net.MalformedURLException;
-import java.util.Set;
-import java.util.function.Consumer;
+    :::code language="java" source="../demo/graphtutorial/src/main/java/graphtutorial/Authentication.java" id="AuthenticationSnippet":::
 
-import com.microsoft.aad.msal4j.DeviceCode;
-import com.microsoft.aad.msal4j.DeviceCodeFlowParameters;
-import com.microsoft.aad.msal4j.IAuthenticationResult;
-import com.microsoft.aad.msal4j.PublicClientApplication;
+1. Em **app. java**, adicione o seguinte código antes da `Scanner input = new Scanner(System.in);` linha para obter um token de acesso.
 
-/**
- * Authentication
- */
-public class Authentication {
+    ```java
+    // Get an access token
+    Authentication.initialize(appId);
+    final String accessToken = Authentication.getUserAccessToken(appScopes);
+    ```
 
-    private static String applicationId;
-    // Set authority to allow only organizational accounts
-    // Device code flow only supports organizational accounts
-    private final static String authority = "https://login.microsoftonline.com/common/";
+1. Adicione a seguinte linha após o `// Display access token` comentário.
 
-    public static void initialize(String applicationId) {
-        Authentication.applicationId = applicationId;
-    }
+    ```java
+    System.out.println("Access token: " + accessToken);
+    ```
 
-    public static String getUserAccessToken(String[] scopes) {
-        if (applicationId == null) {
-            System.out.println("You must initialize Authentication before calling getUserAccessToken");
-            return null;
-        }
+1. Execute o aplicativo. O aplicativo exibe uma URL e um código de dispositivo.
 
-        Set<String> scopeSet = Set.of(scopes);
+    ```Shell
+    Java Graph Tutorial
 
-        PublicClientApplication app;
-        try {
-            // Build the MSAL application object with
-            // app ID and authority
-            app = PublicClientApplication.builder(applicationId)
-                .authority(authority)
-                .build();
-        } catch (MalformedURLException e) {
-            return null;
-        }
+    To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code F7CG945YZ to authenticate.
+    ```
 
-        // Create consumer to receive the DeviceCode object
-        // This method gets executed during the flow and provides
-        // the URL the user logs into and the device code to enter
-        Consumer<DeviceCode> deviceCodeConsumer = (DeviceCode deviceCode) -> {
-            // Print the login information to the console
-            System.out.println(deviceCode.message());
-        };
-
-        // Request a token, passing the requested permission scopes
-        IAuthenticationResult result = app.acquireToken(
-            DeviceCodeFlowParameters
-                .builder(scopeSet, deviceCodeConsumer)
-                .build()
-        ).exceptionally(ex -> {
-            System.out.println("Unable to authenticate - " + ex.getMessage());
-            return null;
-        }).join();
-
-        if (result != null) {
-            return result.accessToken();
-        }
-
-        return null;
-    }
-}
-```
-
-Em **app. java**, adicione o seguinte código antes da `Scanner input = new Scanner(System.in);` linha para obter um token de acesso.
-
-```java
-// Get an access token
-Authentication.initialize(appId);
-final String accessToken = Authentication.getUserAccessToken(appScopes);
-```
-
-Em seguida, adicione a seguinte linha `// Display access token` após o comentário.
-
-```java
-System.out.println("Access token: " + accessToken);
-```
-
-Criar e executar o aplicativo. O aplicativo exibe uma URL e um código de dispositivo.
-
-```Shell
-Java Graph Tutorial
-
-To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code F7CG945YZ to authenticate.
-```
-
-Abra um navegador e navegue até a URL exibida. Insira o código fornecido e entre. Depois de concluído, volte para o aplicativo e escolha o **1. Exibir** opção de token de acesso para exibir o token de acesso.
+1. Abra um navegador e navegue até a URL exibida. Insira o código fornecido e entre. Depois de concluído, volte para o aplicativo e escolha o **1. Exibir** opção de token de acesso para exibir o token de acesso.

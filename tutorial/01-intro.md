@@ -1,10 +1,10 @@
 ---
-ms.openlocfilehash: 3eec5a727d21e481525e2a2892e33a0a30a9bb25
-ms.sourcegitcommit: 2af94da662c454e765b32edeb9406812e3732406
+ms.openlocfilehash: f77f0518aa22d015cf5e915886f8f24a487e7bab
+ms.sourcegitcommit: 189f87d879c57b11992e7bc75580b4c69e014122
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 12/13/2019
-ms.locfileid: "40018779"
+ms.lasthandoff: 04/21/2020
+ms.locfileid: "43612072"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
@@ -15,11 +15,16 @@ Este tutorial ensina como criar um aplicativo de console Java que usa a API do M
 
 ## <a name="prerequisites"></a>Pré-requisitos
 
-Antes de iniciar este tutorial, você deve ter o [Java se Development Kit (JDK)](https://java.com/en/download/faq/develop.xml) e o [Maven](https://maven.apache.org/) instalados em sua máquina de desenvolvimento. Se você não tiver o JDK ou o Maven, visite os links anteriores para opções de download.
+Antes de iniciar este tutorial, você deve ter o [Java se Development Kit (JDK)](https://java.com/en/download/faq/develop.xml) e o [gradle](https://gradle.org/) instalados em sua máquina de desenvolvimento. Se você não tiver o JDK ou o Maven, visite os links anteriores para opções de download.
+
+Você também deve ter uma conta pessoal da Microsoft com uma caixa de correio no Outlook.com ou uma conta corporativa ou de estudante da Microsoft. Se você não tem uma conta da Microsoft, há algumas opções para obter uma conta gratuita:
+
+- Você pode [se inscrever para uma nova conta pessoal da Microsoft](https://signup.live.com/signup?wa=wsignin1.0&rpsnv=12&ct=1454618383&rver=6.4.6456.0&wp=MBI_SSL_SHARED&wreply=https://mail.live.com/default.aspx&id=64855&cbcxt=mai&bk=1454618383&uiflavor=web&uaid=b213a65b4fdc484382b6622b3ecaa547&mkt=E-US&lc=1033&lic=1).
+- Você pode [se inscrever no programa para desenvolvedores do office 365](https://developer.microsoft.com/office/dev-program) para obter uma assinatura gratuita do Office 365.
 
 > [!NOTE]
-> Este tutorial foi escrito com o OpenJDK versão 12.0.1 e o Maven 3.6.1. As etapas deste guia podem funcionar com outras versões, mas que não foram testadas.
+> Este tutorial foi escrito com o OpenJDK versão 14.0.0.36 e o gradle 6,3. As etapas deste guia podem funcionar com outras versões, mas que não foram testadas.
 
-## <a name="feedback"></a>Feedback
+## <a name="feedback"></a>Comentários
 
 Forneça comentários sobre este tutorial no [repositório do GitHub](https://github.com/microsoftgraph/msgraph-training-java).

@@ -1,10 +1,10 @@
 ---
-ms.openlocfilehash: 4e62f08217ab00427218cd1815d66d80fd2802de
-ms.sourcegitcommit: 2af94da662c454e765b32edeb9406812e3732406
+ms.openlocfilehash: c21adae303c65e52ec2402c56e174066f879f40b
+ms.sourcegitcommit: 189f87d879c57b11992e7bc75580b4c69e014122
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 12/13/2019
-ms.locfileid: "40018784"
+ms.lasthandoff: 04/21/2020
+ms.locfileid: "43612079"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
@@ -20,7 +20,7 @@ Neste exercício, você criará um novo aplicativo do Azure AD usando o centro d
 
     - Defina **Nome** para `Java Graph Tutorial`.
     - Defina **Tipos de conta com suporte** para **Contas em qualquer diretório organizacional e contas pessoais da Microsoft**.
-    - Deixe o **URI de Redirecionamento** vazio.
+    - Em **URI de redirecionamento**, altere o menu suspenso para **cliente público (Desktop & móvel)** e defina `https://login.microsoftonline.com/common/oauth2/nativeclient`o valor como.
 
     ![Uma captura de tela da página registrar um aplicativo](./images/aad-register-an-app.png)
 
@@ -28,10 +28,6 @@ Neste exercício, você criará um novo aplicativo do Azure AD usando o centro d
 
     ![Uma captura de tela da ID do aplicativo do novo registro de aplicativo](./images/aad-application-id.png)
 
-1. Selecione o link **Adicionar um URI de redirecionamento** . Na página **redirecionar URIs** , localize a seção **redirecionar URIs sugeridos para clientes públicos (móvel, área de trabalho)** . Selecione o `https://login.microsoftonline.com/common/oauth2/nativeclient` URI.
-
-    ![Captura de tela da página URIs de redirecionamento](./images/aad-redirect-uris.png)
-
-1. Localize a seção **tipo de cliente padrão** e altere o **aplicativo tratar como um cliente público** alternar para **Sim**e, em seguida, escolha **salvar**.
+1. Selecione **Autenticação** em **Gerenciar**. Localize a seção **Configurações avançadas** e altere o **aplicativo tratar como um cliente público** //para **Sim**e, em seguida, escolha **salvar**.
 
     ![Uma captura de tela da seção tipo de cliente padrão](./images/aad-default-client-type.png)

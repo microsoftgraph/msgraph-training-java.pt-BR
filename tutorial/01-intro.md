@@ -1,10 +1,10 @@
 ---
-ms.openlocfilehash: f77f0518aa22d015cf5e915886f8f24a487e7bab
-ms.sourcegitcommit: 189f87d879c57b11992e7bc75580b4c69e014122
+ms.openlocfilehash: f13ee9baa26bb487d5b50bd966e40cee9ba64378
+ms.sourcegitcommit: 22ec2c0e4803b82c9d360f3609f8b15ba5d017ca
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 04/21/2020
-ms.locfileid: "43612072"
+ms.lasthandoff: 04/29/2020
+ms.locfileid: "43940473"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
@@ -15,7 +15,7 @@ Este tutorial ensina como criar um aplicativo de console Java que usa a API do M
 
 ## <a name="prerequisites"></a>Pré-requisitos
 
-Antes de iniciar este tutorial, você deve ter o [Java se Development Kit (JDK)](https://java.com/en/download/faq/develop.xml) e o [gradle](https://gradle.org/) instalados em sua máquina de desenvolvimento. Se você não tiver o JDK ou o Maven, visite os links anteriores para opções de download.
+Antes de iniciar este tutorial, você deve ter o [Java se Development Kit (JDK)](https://java.com/en/download/faq/develop.xml) e o [gradle](https://gradle.org/) instalados em sua máquina de desenvolvimento. Se você não tiver o JDK ou o gradle, visite os links anteriores para obter opções de download.
 
 Você também deve ter uma conta pessoal da Microsoft com uma caixa de correio no Outlook.com ou uma conta corporativa ou de estudante da Microsoft. Se você não tem uma conta da Microsoft, há algumas opções para obter uma conta gratuita:
 
@@ -25,6 +25,6 @@ Você também deve ter uma conta pessoal da Microsoft com uma caixa de correio n
 > [!NOTE]
 > Este tutorial foi escrito com o OpenJDK versão 14.0.0.36 e o gradle 6,3. As etapas deste guia podem funcionar com outras versões, mas que não foram testadas.
 
-## <a name="feedback"></a>Comentários
+## <a name="feedback"></a>Feedback
 
 Forneça comentários sobre este tutorial no [repositório do GitHub](https://github.com/microsoftgraph/msgraph-training-java).

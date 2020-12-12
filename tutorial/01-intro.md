@@ -1,10 +1,10 @@
 ---
-ms.openlocfilehash: f13ee9baa26bb487d5b50bd966e40cee9ba64378
-ms.sourcegitcommit: 22ec2c0e4803b82c9d360f3609f8b15ba5d017ca
+ms.openlocfilehash: 3b1e366ded1e9d59f048eec8da23a686a121dedf
+ms.sourcegitcommit: eb935a250f8531b04a42710356072b80d46ee3a4
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 04/29/2020
-ms.locfileid: "43940473"
+ms.lasthandoff: 12/11/2020
+ms.locfileid: "49661071"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
@@ -23,8 +23,8 @@ Você também deve ter uma conta pessoal da Microsoft com uma caixa de correio n
 - Você pode [se inscrever no programa para desenvolvedores do office 365](https://developer.microsoft.com/office/dev-program) para obter uma assinatura gratuita do Office 365.
 
 > [!NOTE]
-> Este tutorial foi escrito com o OpenJDK versão 14.0.0.36 e o gradle 6,3. As etapas deste guia podem funcionar com outras versões, mas que não foram testadas.
+> Este tutorial foi escrito com OpenJDK versão 14.0.0.36 e gradle 6.7.1. As etapas deste guia podem funcionar com outras versões, mas que não foram testadas.
 
-## <a name="feedback"></a>Feedback
+## <a name="feedback"></a>Comentários
 
 Forneça comentários sobre este tutorial no [repositório do GitHub](https://github.com/microsoftgraph/msgraph-training-java).

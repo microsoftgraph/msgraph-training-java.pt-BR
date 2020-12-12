@@ -1,10 +1,10 @@
 ---
-ms.openlocfilehash: 93688a97872ad640c12c7137f4cc09ede4a98416
-ms.sourcegitcommit: 189f87d879c57b11992e7bc75580b4c69e014122
+ms.openlocfilehash: c26e5b8ab0b7c5c62b926e3f5416b94e3f10b601
+ms.sourcegitcommit: eb935a250f8531b04a42710356072b80d46ee3a4
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 04/21/2020
-ms.locfileid: "43612065"
+ms.lasthandoff: 12/11/2020
+ms.locfileid: "49661043"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
@@ -12,7 +12,7 @@ Neste exercício, você incorporará o Microsoft Graph no aplicativo. Para este 
 
 ## <a name="implement-an-authentication-provider"></a>Implementar um provedor de autenticação
 
-O SDK do Microsoft Graph para Java requer uma implementação da `IAuthenticationProvider` interface para criar uma `GraphServiceClient` instância do objeto.
+O SDK do Microsoft Graph para Java requer uma implementação da `IAuthenticationProvider` interface para criar uma instância do `GraphServiceClient` objeto.
 
 1. Crie um novo arquivo no diretório **./graphtutorial/src/main/java/graphtutorial** chamado **SimpleAuthProvider. java** e adicione o código a seguir.
 
@@ -25,18 +25,30 @@ O SDK do Microsoft Graph para Java requer uma implementação da `IAuthenticatio
     ```java
     package graphtutorial;
 
+    import java.time.LocalDateTime;
+    import java.time.ZonedDateTime;
+    import java.time.format.DateTimeFormatter;
     import java.util.LinkedList;
     import java.util.List;
+    import java.util.Set;
 
     import com.microsoft.graph.logger.DefaultLogger;
     import com.microsoft.graph.logger.LoggerLevel;
+    import com.microsoft.graph.models.extensions.Attendee;
+    import com.microsoft.graph.models.extensions.DateTimeTimeZone;
+    import com.microsoft.graph.models.extensions.EmailAddress;
     import com.microsoft.graph.models.extensions.Event;
     import com.microsoft.graph.models.extensions.IGraphServiceClient;
+    import com.microsoft.graph.models.extensions.ItemBody;
     import com.microsoft.graph.models.extensions.User;
+    import com.microsoft.graph.models.generated.AttendeeType;
+    import com.microsoft.graph.models.generated.BodyType;
+    import com.microsoft.graph.options.HeaderOption;
     import com.microsoft.graph.options.Option;
     import com.microsoft.graph.options.QueryOption;
     import com.microsoft.graph.requests.extensions.GraphServiceClient;
     import com.microsoft.graph.requests.extensions.IEventCollectionPage;
+    import com.microsoft.graph.requests.extensions.IEventCollectionRequestBuilder;
 
     /**
      * Graph
@@ -70,6 +82,7 @@ O SDK do Microsoft Graph para Java requer uma implementação da `IAuthenticatio
             User me = graphClient
                 .me()
                 .buildRequest()
+                .select("displayName,mailboxSettings")
                 .get();
 
             return me;
@@ -89,6 +102,7 @@ O SDK do Microsoft Graph para Java requer uma implementação da `IAuthenticatio
     // Greet the user
     User user = Graph.getUser(accessToken);
     System.out.println("Welcome " + user.displayName);
+    System.out.println("Time zone: " + user.mailboxSettings.timeZone);
     System.out.println();
     ```
 
@@ -102,18 +116,35 @@ O SDK do Microsoft Graph para Java requer uma implementação da `IAuthenticatio
 
 Considere o que esse código está fazendo.
 
-- A URL que será chamada é `/me/events`.
-- A `select` função limita os campos retornados para cada evento para apenas aqueles que o aplicativo realmente usará.
-- A `QueryOption` é usada para classificar os resultados pela data e hora em que foram criados, com o item mais recente em primeiro lugar.
+- A URL que será chamada é `/me/calendarview` .
+  - `QueryOption` os objetos são usados para adicionar `startDateTime` os `endDateTime` parâmetros e, ao definir o início e o fim do modo de exibição de calendário.
+  - Um `QueryOption` objeto é usado para adicionar o `$orderby` parâmetro, classificando os resultados por hora de início.
+  - Um `HeaderOption` objeto é usado para adicionar o `Prefer: outlook.timezone` cabeçalho, fazendo com que as horas de início e de término sejam ajustadas para o fuso horário do usuário.
+  - A `select` função limita os campos retornados para cada evento para apenas aqueles que o aplicativo realmente usará.
+  - A `top` função limita o número de eventos na resposta a um máximo de 25.
+- A `getNextPage` função é usada para solicitar páginas adicionais de resultados se houver mais de 25 eventos na semana atual.
+
+1. Crie um novo arquivo no diretório **./graphtutorial/src/main/java/graphtutorial** chamado **GraphToIana. java** e adicione o código a seguir.
+
+    :::code language="java" source="../demo/graphtutorial/src/main/java/graphtutorial/GraphToIana.java" id="zoneMappingsSnippet":::
+
+    Essa classe implementa uma pesquisa simples para converter os nomes de fuso horário do Windows para identificadores da IANA e para gerar um **Identificação_da_Zona** baseado em um nome de fuso horário do Windows.
 
 ## <a name="display-the-results"></a>Exibir os resultados
 
 1. Adicione as seguintes `import` instruções em **app. java**.
 
     ```java
+    import java.time.DayOfWeek;
     import java.time.LocalDateTime;
+    import java.time.ZoneId;
+    import java.time.ZonedDateTime;
     import java.time.format.DateTimeFormatter;
+    import java.time.format.DateTimeParseException;
     import java.time.format.FormatStyle;
+    import java.time.temporal.ChronoUnit;
+    import java.time.temporal.TemporalAdjusters;
+    import java.util.HashSet;
     import java.util.List;
     import com.microsoft.graph.models.extensions.DateTimeTimeZone;
     import com.microsoft.graph.models.extensions.Event;
@@ -141,27 +172,52 @@ Considere o que esse código está fazendo.
     Please choose one of the following options:
     0. Exit
     1. Display access token
-    2. List calendar events
+    2. View this week's calendar
+    3. Add an event
     2
     Events:
-    Subject: Team meeting
+    Subject: Weekly meeting
+      Organizer: Lynne Robbins
+      Start: 12/7/20, 2:00 PM (Pacific Standard Time)
+      End: 12/7/20, 3:00 PM (Pacific Standard Time)
+    Subject: Carpool
+      Organizer: Lynne Robbins
+      Start: 12/7/20, 4:00 PM (Pacific Standard Time)
+      End: 12/7/20, 5:30 PM (Pacific Standard Time)
+    Subject: Tailspin Toys Proposal Review + Lunch
+      Organizer: Lidia Holloway
+      Start: 12/8/20, 12:00 PM (Pacific Standard Time)
+      End: 12/8/20, 1:00 PM (Pacific Standard Time)
+    Subject: Project Tailspin
+      Organizer: Lidia Holloway
+      Start: 12/8/20, 3:00 PM (Pacific Standard Time)
+      End: 12/8/20, 4:30 PM (Pacific Standard Time)
+    Subject: Company Meeting
+      Organizer: Christie Cline
+      Start: 12/9/20, 8:30 AM (Pacific Standard Time)
+      End: 12/9/20, 11:00 AM (Pacific Standard Time)
+    Subject: Carpool
+      Organizer: Lynne Robbins
+      Start: 12/9/20, 4:00 PM (Pacific Standard Time)
+      End: 12/9/20, 5:30 PM (Pacific Standard Time)
+    Subject: Project Team Meeting
+      Organizer: Lidia Holloway
+      Start: 12/10/20, 8:00 AM (Pacific Standard Time)
+      End: 12/10/20, 9:30 AM (Pacific Standard Time)
+    Subject: Weekly Marketing Lunch
       Organizer: Adele Vance
-      Start: 5/22/19, 3:00 PM (UTC)
-      End: 5/22/19, 4:00 PM (UTC)
-    Subject: Team Lunch
-      Organizer: Adele Vance
-      Start: 5/24/19, 6:30 PM (UTC)
-      End: 5/24/19, 8:00 PM (UTC)
-    Subject: Flight to Redmond
-      Organizer: Adele Vance
-      Start: 5/26/19, 4:30 PM (UTC)
-      End: 5/26/19, 7:00 PM (UTC)
-    Subject: Let's meet to discuss strategy
-      Organizer: Patti Fernandez
-      Start: 5/27/19, 10:00 PM (UTC)
-      End: 5/27/19, 10:30 PM (UTC)
-    Subject: All-hands meeting
-      Organizer: Adele Vance
-      Start: 5/28/19, 3:30 PM (UTC)
-      End: 5/28/19, 5:00 PM (UTC)
+      Start: 12/10/20, 12:00 PM (Pacific Standard Time)
+      End: 12/10/20, 1:00 PM (Pacific Standard Time)
+    Subject: Project Tailspin
+      Organizer: Lidia Holloway
+      Start: 12/10/20, 3:00 PM (Pacific Standard Time)
+      End: 12/10/20, 4:30 PM (Pacific Standard Time)
+    Subject: Lunch?
+      Organizer: Lynne Robbins
+      Start: 12/11/20, 12:00 PM (Pacific Standard Time)
+      End: 12/11/20, 1:00 PM (Pacific Standard Time)
+    Subject: Friday Unwinder
+      Organizer: Megan Bowen
+      Start: 12/11/20, 4:00 PM (Pacific Standard Time)
+      End: 12/11/20, 5:00 PM (Pacific Standard Time)
     ```

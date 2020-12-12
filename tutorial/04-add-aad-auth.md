@@ -1,10 +1,10 @@
 ---
-ms.openlocfilehash: 3e4d7f11c89947da29873c85ab2808279c94265a
-ms.sourcegitcommit: 189f87d879c57b11992e7bc75580b4c69e014122
+ms.openlocfilehash: 4c04317462240ff0696ac1381fae886481db7847
+ms.sourcegitcommit: eb935a250f8531b04a42710356072b80d46ee3a4
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 04/21/2020
-ms.locfileid: "43612058"
+ms.lasthandoff: 12/11/2020
+ms.locfileid: "49661064"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
@@ -12,16 +12,20 @@ Neste exercício, você estenderá o aplicativo do exercício anterior para ofer
 
 1. Crie um novo diretório chamado **graphtutorial** no diretório **./src/main/resources** .
 
-1. Crie um novo arquivo no diretório **./src/main/resources/graphtutorial** chamado **OAuth. Properties**e adicione o seguinte texto nesse arquivo.
+1. Crie um novo arquivo no diretório **./src/main/resources/graphtutorial** chamado **OAuth. Properties** e adicione o seguinte texto nesse arquivo. Substitua `YOUR_APP_ID_HERE` pela ID do aplicativo que você criou no portal do Azure.
 
     :::code language="ini" source="../demo/graphtutorial/src/main/resources/graphtutorial/oAuth.properties.example":::
 
-    Substitua `YOUR_APP_ID_HERE` pela ID do aplicativo que você criou no portal do Azure.
+    O valor de `app.scopes` contém os escopos de permissão que o aplicativo exige.
+
+    - **User. Read** permite que o aplicativo acesse o perfil do usuário.
+    - **MailboxSettings. Read** permite que o aplicativo acesse as configurações da caixa de correio do usuário, incluindo o fuso horário configurado do usuário.
+    - **Calendars. ReadWrite** permite que o aplicativo liste o calendário do usuário e adicione novos eventos ao calendário.
 
     > [!IMPORTANT]
     > Se você estiver usando o controle de origem como o Git, agora seria uma boa hora para excluir o arquivo **OAuth. Properties** do controle de origem para evitar vazar inadvertidamente sua ID de aplicativo.
 
-1. Abra **app. java** e adicione as instruções `import` a seguir.
+1. Abra **app. java** e adicione as instruções a seguir `import` .
 
     ```java
     import java.io.IOException;
@@ -61,3 +65,6 @@ Neste exercício, você estenderá o aplicativo do exercício anterior para ofer
     ```
 
 1. Abra um navegador e navegue até a URL exibida. Insira o código fornecido e entre. Depois de concluído, volte para o aplicativo e escolha o **1. Exibir** opção de token de acesso para exibir o token de acesso.
+
+> [!TIP]
+> Tokens de acesso para contas corporativas ou de estudante da Microsoft podem ser analisados para fins de solução de problemas em [https://jwt.ms](https://jwt.ms) . Tokens de acesso para contas pessoais da Microsoft usam um formato proprietário e não podem ser analisados.

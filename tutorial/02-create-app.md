@@ -1,16 +1,16 @@
 ---
-ms.openlocfilehash: 72936993d940cdfb86c864a6ffc543ed466127d1
-ms.sourcegitcommit: eb935a250f8531b04a42710356072b80d46ee3a4
+ms.openlocfilehash: b80de156a5ed1708ccafbaabf34b49b119f4099c
+ms.sourcegitcommit: 5c09eff01b265ddfcca9090c14dca80a95320edd
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 12/11/2020
-ms.locfileid: "49661078"
+ms.lasthandoff: 04/13/2021
+ms.locfileid: "51695797"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
-Nesta seção, você criará um aplicativo de console Java básico.
+Nesta seção, você criará um aplicativo básico Java console.
 
-1. Abra a interface de linha de comando (CLI) em um diretório onde você deseja criar o projeto. Execute o seguinte comando para criar um novo projeto do gradle.
+1. Abra sua interface de linha de comando (CLI) em um diretório onde você deseja criar o projeto. Execute o seguinte comando para criar um novo projeto Gradle.
 
     ```Shell
     gradle init --dsl groovy --test-framework junit --type java-application --project-name graphtutorial --package graphtutorial
@@ -22,29 +22,28 @@ Nesta seção, você criará um aplicativo de console Java básico.
     ./gradlew --console plain run
     ```
 
-    Se funcionar, o aplicativo deve gerar saída `Hello World.` .
+    Se funcionar, o aplicativo deverá ter `Hello World.` saída .
 
 ## <a name="install-dependencies"></a>Instalar dependências
 
-Antes de prosseguir, adicione algumas dependências adicionais que você usará posteriormente.
+Antes de continuar, adicione algumas dependências adicionais que você usará mais tarde.
 
-- [Biblioteca de autenticação da Microsoft (MSAL) para Java](https://github.com/AzureAD/microsoft-authentication-library-for-java) para autenticar o usuário e adquirir tokens de acesso.
-- [SDK do Microsoft Graph para Java](https://github.com/microsoftgraph/msgraph-sdk-java) para fazer chamadas para o Microsoft Graph.
-- [SLF4J Nop Binding](https://mvnrepository.com/artifact/org.slf4j/slf4j-nop) para suprimir o registro em log do MSAL.
+- [Biblioteca de clientes do Azure Identity para Java](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/identity/azure-identity) autenticar o usuário e adquirir tokens de acesso.
+- [Microsoft Graph SDK para Java](https://github.com/microsoftgraph/msgraph-sdk-java) fazer chamadas para o Microsoft Graph.
 
-1. Abra **./Build.gradle**. Atualize a `dependencies` seção para adicionar essas dependências.
+1. Abra **./build.gradle**. Atualize `dependencies` a seção para adicionar essas dependências.
 
-    :::code language="gradle" source="../demo/graphtutorial/build.gradle" id="DependenciesSnippet" highlight="7-9":::
+    :::code language="gradle" source="../demo/graphtutorial/build.gradle" id="DependenciesSnippet" highlight="7-8":::
 
-1. Adicione o seguinte ao final de **./Build.gradle**.
+1. Adicione o seguinte ao final de **./build.gradle**.
 
     :::code language="gradle" source="../demo/graphtutorial/build.gradle" id="StandardInputSnippet":::
 
-Na próxima vez que você criar o projeto, o gradle baixará essas dependências.
+Na próxima vez que você criar o projeto, Gradle baixará essas dependências.
 
-## <a name="design-the-app"></a>Projetar o aplicativo
+## <a name="design-the-app"></a>Design do aplicativo
 
-1. Abra o arquivo **./src/main/java/graphtutorial/app.java** e substitua o conteúdo pelo seguinte.
+1. Abra o **arquivo ./src/main/java/graphtutorial/App.java** e substitua seu conteúdo pelo seguinte.
 
     ```java
     package graphtutorial;
@@ -105,4 +104,4 @@ Na próxima vez que você criar o projeto, o gradle baixará essas dependências
     }
     ```
 
-    Isso implementa um menu básico e lê a opção do usuário na linha de comando.
+    Isso implementa um menu básico e lê a escolha do usuário na linha de comando.

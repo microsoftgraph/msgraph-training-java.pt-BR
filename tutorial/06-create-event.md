@@ -1,29 +1,29 @@
 ---
-ms.openlocfilehash: c03403209c6985dd3235488891a263e447c72149
-ms.sourcegitcommit: eb935a250f8531b04a42710356072b80d46ee3a4
+ms.openlocfilehash: bbb71d370fea90a3f7d2eae2f27d04f7e19d3d94
+ms.sourcegitcommit: 5c09eff01b265ddfcca9090c14dca80a95320edd
 ms.translationtype: MT
 ms.contentlocale: pt-BR
-ms.lasthandoff: 12/11/2020
-ms.locfileid: "49661096"
+ms.lasthandoff: 04/13/2021
+ms.locfileid: "51695783"
 ---
 <!-- markdownlint-disable MD002 MD041 -->
 
 Nesta seção, você adicionará a capacidade de criar eventos no calendário do usuário.
 
-1. Abra **./graphtutorial/src/main/java/graphtutorial/Graph.java** e adicione a função a seguir à classe do **gráfico** .
+1. Abra **./graphtutorial/src/main/java/graphtutorial/Graph.java** e adicione a seguinte função à classe **Graph.**
 
     :::code language="java" source="../demo/graphtutorial/src/main/java/graphtutorial/Graph.java" id="CreateEventSnippet":::
 
-1. Abra **./graphtutorial/src/main/java/graphtutorial/app.java** e adicione a função a seguir à classe de **aplicativo** .
+1. Abra **./graphtutorial/src/main/java/graphtutorial/App.java** e adicione a seguinte função à classe **App.**
 
     :::code language="java" source="../demo/graphtutorial/src/main/java/graphtutorial/App.java" id="CreateEventSnippet":::
 
-    Essa função solicita ao usuário assunto, participantes, início, fim e corpo e, em seguida, usa esses valores para chamar `Graph.createEvent` .
+    Essa função solicita ao usuário assunto, participantes, início, fim e corpo, em seguida, usa esses valores para chamar `Graph.createEvent` .
 
-1. Adicione o seguinte logo após o `// Create a new event` comentário na `Main` função.
+1. Adicione o seguinte logo após `// Create a new event` o comentário na `Main` função.
 
     ```java
-    createEvent(accessToken, user.mailboxSettings.timeZone, input);
+    createEvent(user.mailboxSettings.timeZone, input);
     ```
 
-1. Salve todas as suas alterações e execute o aplicativo. Escolha a opção **Adicionar um evento** . Responda aos prompts para criar um novo evento no calendário do usuário.
+1. Salve todas as alterações e execute o aplicativo. Escolha a **opção Adicionar um** evento. Responda aos prompts para criar um novo evento no calendário do usuário.
